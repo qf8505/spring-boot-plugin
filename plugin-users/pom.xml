@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.plugin</groupId>
+        <artifactId>SpringBootPlugin</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <groupId>com.plugin</groupId>
+    <artifactId>plugin-users</artifactId>
+    <name>plugin-users</name>
+    <description>插件使用者</description>
+
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-all</artifactId>
+        <version>${hutool.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>com.plugin</groupId>
+        <artifactId>plugin-interface</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>net.lingala.zip4j</groupId>-->
+<!--            <artifactId>zip4j</artifactId>-->
+<!--            <version>2.9.1</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.util</groupId>-->
+<!--            <artifactId>plugin-impl</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
+</dependencies>
+
+    <!-- 设置 jitpack.io 插件仓库 -->
+<!--    <pluginRepositories>-->
+<!--        <pluginRepository>-->
+<!--            <id>jitpack.io</id>-->
+<!--            <url>https://jitpack.io</url>-->
+<!--        </pluginRepository>-->
+<!--    </pluginRepositories>-->
+
+    <build>
+        <plugins>
+<!--            <plugin>-->
+<!--                <groupId>com.github.core-lib</groupId>-->
+<!--                <artifactId>xjar-maven-plugin</artifactId>-->
+<!--                <version>4.0.2</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>package</phase>-->
+<!--                        <configuration>-->
+<!--                            <password>io.xjar</password>-->
+<!--                            &lt;!&ndash; optional-->
+<!--                            <algorithm/>-->
+<!--                            <keySize/>-->
+<!--                            <ivSize/>-->
+<!--                            <includes>-->
+<!--                                <include/>-->
+<!--                            </includes>-->
+<!--                            <excludes>-->
+<!--                                <exclude/>-->
+<!--                            </excludes>-->
+<!--                            <sourceDir/>-->
+<!--                            <sourceJar/>-->
+<!--                            <targetDir/>-->
+<!--                            <targetJar/>-->
+<!--                            &ndash;&gt;-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+<plugin>
+    <groupId>com.github.wvengen</groupId>
+    <artifactId>proguard-maven-plugin</artifactId>
+    <version>2.6.0</version>
+    <executions>
+        <!-- 以下配置说明执行mvn的package命令时候，会执行proguard-->
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>proguard</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <!-- 就是输入Jar的名称，我们要知道，代码混淆其实是将一个原始的jar，生成一个混淆后的jar，那么就会有输入输出。 -->
+        <injar>${project.build.finalName}.jar</injar>
+        <!-- 输出jar名称，输入输出jar同名的时候就是覆盖，也是比较常用的配置。 -->
+        <outjar>${project.build.finalName}.jar</outjar>
+        <!-- 是否混淆 默认是true -->
+        <obfuscate>true</obfuscate>
+        <!-- 配置一个文件，通常叫做proguard.cfg,该文件主要是配置options选项，也就是说使用proguard.cfg那么options下的所有内容都可以移到proguard.cfg中 -->
+        <proguardInclude>${project.basedir}/proguard.cfg</proguardInclude>
+        <!-- 额外的jar包，通常是项目编译所需要的jar -->
+        <libs>
+            <lib>${java.home}/lib/rt.jar</lib>
+            <lib>${java.home}/lib/jce.jar</lib>
+            <lib>${java.home}/lib/jsse.jar</lib>
+        </libs>
+        <!-- 对输入jar进行过滤比如，如下配置就是对META-INFO文件不处理。 -->
+        <inLibsFilter>!META-INF/**,!META-INF/versions/9/**.class</inLibsFilter>
+        <!-- 这是输出路径配置，但是要注意这个路径必须要包括injar标签填写的jar -->
+        <outputDirectory>${project.basedir}/target</outputDirectory>
+        <!--这里特别重要，此处主要是配置混淆的一些细节选项，比如哪些类不需要混淆，哪些需要混淆-->
+        <options>
+            <!-- 可以在此处写option标签配置，不过我上面使用了proguardInclude，故而我更喜欢在proguard.cfg中配置 -->
+        </options>
+    </configuration>
+</plugin>
+<plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <version>2.5.5</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>repackage</goal>
+            </goals>
+            <configuration>
+                <mainClass>com.SpringBootPluginTestApplication</mainClass>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+        </plugins>
+    </build>
+
+<!--    <build>-->
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                &lt;!&ndash;指定mapping下的所有xml文件打包在jar中&ndash;&gt;-->
+<!--                <targetPath>${project.build.directory}/classes</targetPath>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <filtering>true</filtering>-->
+<!--                <includes>-->
+<!--                    <include>mapping/*.xml</include>-->
+<!--                    <include>*.yml</include>-->
+<!--                    <include>*.txt</include>-->
+<!--                    <include>*.properties</include>-->
+<!--                </includes>-->
+<!--            </resource>-->
+<!--            <resource>-->
+<!--                &lt;!&ndash;resources下一级的所有.xml .properties文件复制到config目录下&ndash;&gt;-->
+<!--                <targetPath>${project.build.directory}/config</targetPath>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <filtering>true</filtering>-->
+<!--                <includes>-->
+<!--                    <include>**.xml</include>-->
+<!--                    <include>**.yml</include>-->
+<!--                    <include>**.properties</include>-->
+<!--                </includes>-->
+<!--            </resource>-->
+<!--        </resources>-->
+<!--        <plugins>-->
+<!--            &lt;!&ndash;maven-dependency插件，将项目所有依赖包放到lib目录下&ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>copy-dependencies</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-dependencies</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <type>jar</type>-->
+<!--                            <includeTypes>jar</includeTypes>-->
+<!--                            <outputDirectory>-->
+<!--                                ${project.build.directory}/lib-->
+<!--                            </outputDirectory>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <classesDirectory>target/classes/</classesDirectory>-->
+<!--                    <archive>-->
+<!--                        &lt;!&ndash;生成的jar中，不要包含pom.xml和pom.properties这两个文件&ndash;&gt;-->
+<!--                        <addMavenDescriptor>true</addMavenDescriptor>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>com.com.SpringBootPluginTestApplication</mainClass>-->
+<!--                            &lt;!&ndash; 打包时 MANIFEST.MF文件不记录的时间戳版本 &ndash;&gt;-->
+<!--                            <useUniqueVersions>false</useUniqueVersions>-->
+<!--                            <addClasspath>true</addClasspath>-->
+<!--                            <classpathPrefix>lib/</classpathPrefix>-->
+<!--                        </manifest>-->
+<!--                        <manifestEntries>-->
+<!--                            &lt;!&ndash;jar中的MANIFEST.MF文件ClassPath需要添加config目录才能读取到配置文件&ndash;&gt;-->
+<!--                            <Class-Path>config/</Class-Path>-->
+<!--                        </manifestEntries>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
+
+
+</project>
